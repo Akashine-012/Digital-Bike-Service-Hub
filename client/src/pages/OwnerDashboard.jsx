@@ -60,45 +60,46 @@ export default function OwnerDashboard() {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Owner Dashboard</h2>
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white p-6">
+      <h2 className="text-3xl font-bold text-center mb-8 text-blue-800">
+        Owner Dashboard
+      </h2>
 
-      <div className="mb-6 border p-4 rounded shadow">
-        <h3 className="font-semibold mb-2">
-          {editingServiceId ? "Edit Service" : "Add Service"}
+      <div className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-lg border border-gray-200 mb-8">
+        <h3 className="text-xl font-semibold mb-4 text-blue-700 text-center">
+          {editingServiceId ? "Edit Service" : "Add New Service"}
         </h3>
+
         <input
-          className="border p-2 mr-2 mb-2 w-full"
+          className="w-full border p-2 mb-3 rounded-lg"
           placeholder="Name"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
-        <input
-          className="border p-2 mr-2 mb-2 w-full"
+        <textarea
+          className="w-full border p-2 mb-3 rounded-lg"
           placeholder="Description"
           value={form.description}
-          onChange={(e) =>
-            setForm({ ...form, description: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
         <input
-          className="border p-2 mr-2 mb-2 w-full"
-          placeholder="Price"
           type="number"
+          className="w-full border p-2 mb-4 rounded-lg"
+          placeholder="Price"
           value={form.price}
           onChange={(e) => setForm({ ...form, price: e.target.value })}
         />
 
-        <div className="flex gap-2">
+        <div className="flex gap-4 justify-center">
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
             onClick={createOrUpdateService}
           >
             {editingServiceId ? "Update" : "Add"}
           </button>
           {editingServiceId && (
             <button
-              className="bg-gray-500 text-white px-4 py-2 rounded"
+              className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition"
               onClick={cancelEdit}
             >
               Cancel
@@ -107,30 +108,40 @@ export default function OwnerDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {services.map((service) => (
-          <div key={service._id} className="border p-4 rounded shadow">
-            <h3 className="text-lg font-bold">{service.name}</h3>
-            <p>{service.description}</p>
-            <p className="text-blue-600 font-semibold">₹{service.price}</p>
-
-            <div className="mt-2 flex gap-2">
-              <button
-                className="bg-yellow-500 text-white px-3 py-1 rounded"
-                onClick={() => startEdit(service)}
-              >
-                Edit
-              </button>
-              <button
-                className="bg-red-600 text-white px-3 py-1 rounded"
-                onClick={() => deleteService(service._id)}
-              >
-                Delete
-              </button>
+      {services.length === 0 ? (
+        <p className="text-center text-gray-600">Loading services...</p>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4">
+          {services.map((service) => (
+            <div
+              key={service._id}
+              className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition duration-300"
+            >
+              <h3 className="text-xl font-semibold text-blue-700 mb-2">
+                {service.name}
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">{service.description}</p>
+              <p className="text-lg font-bold text-blue-800 mb-4">
+                ₹{service.price}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => startEdit(service)}
+                  className="w-1/2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => deleteService(service._id)}
+                  className="w-1/2 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
