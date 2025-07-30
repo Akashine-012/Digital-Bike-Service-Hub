@@ -1,0 +1,23 @@
+const Service = require("../models/Service");
+
+exports.createService = async (req, res) => {
+  const { name, description, price } = req.body;
+  const ownerId = req.user.id;
+  const service = await Service.create({ name, description, price, ownerId });
+  res.json(service);
+};
+
+exports.updateService = async (req, res) => {
+  const service = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.json(service);
+};
+
+exports.deleteService = async (req, res) => {
+  await Service.findByIdAndDelete(req.params.id);
+  res.json({ message: "Deleted" });
+};
+
+exports.getAllServices = async (req, res) => {
+  const services = await Service.find();
+  res.json(services);
+};
